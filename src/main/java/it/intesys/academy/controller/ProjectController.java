@@ -2,7 +2,6 @@ package it.intesys.academy.controller;
 
 import it.intesys.academy.dto.ProjectDTO;
 import it.intesys.academy.repository.ProjectRepository;
-import it.intesys.academy.service.ProjectService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,7 +12,7 @@ import java.util.List;
 @RestController
 public class ProjectController {
 
-    private final ProjectRepository projectRepository;
+    private ProjectRepository projectRepository;
 
 
     public ProjectController( ProjectRepository projectRepository) {
@@ -25,8 +24,8 @@ public class ProjectController {
         return projectRepository.GetProjects(userName);
     }
 
-    @GetMapping("/projects-list/{projectId}")
-    public List<ProjectDTO> getProjectsById(@PathVariable String projectId) {
-        return projectRepository.GetProjectsById(projectId);
+    @GetMapping("/single-project/{projectId}")
+    public ProjectDTO getProjectsById(@PathVariable String projectId) {
+        return projectRepository.getProjectById(Integer.parseInt(projectId));
     }
 }

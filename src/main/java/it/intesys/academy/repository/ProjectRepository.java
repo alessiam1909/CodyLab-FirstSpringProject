@@ -36,16 +36,15 @@ public class ProjectRepository {
     };
 
 
-    public List<ProjectDTO> GetProjectsById(String projectId){
+    public ProjectDTO getProjectById(Integer projectId){
 
-        List<Integer> userProjects = settingsService.getUserProjects(projectId);
 
-        List<ProjectDTO> projects = jdbcTemplate.query("SELECT id, name, description FROM Projects where id in (:projectIds)",
-                Map.of("projectIds", userProjects),
+        ProjectDTO project = jdbcTemplate.queryForObject("SELECT id, name, description FROM Projects where id = :projectId",
+                Map.of("projectId", projectId),
 
                 BeanPropertyRowMapper.newInstance(ProjectDTO.class));
 
-        return projects;
+        return project;
     };
 
 
