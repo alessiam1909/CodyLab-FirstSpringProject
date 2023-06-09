@@ -33,6 +33,6 @@ public class AppController {
 
     @GetMapping("/projects")
     public List<ProjectDTO> getProjects(@RequestParam String userName) {
-        return projectService.readProjects(userName);
+        return projectService.getProjects(userName);
     }
 }

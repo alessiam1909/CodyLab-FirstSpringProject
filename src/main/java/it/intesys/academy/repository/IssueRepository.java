@@ -29,7 +29,7 @@ public class IssueRepository {
     }
 
     public List<IssueDTO> searchIssues(List<Integer> issuesIds){
-        List<IssueDTO> issues = jdbcTemplate.query("SELECT id, name, message, author,projectId FROM Issues where id in (:issuesIds)",
+        List<IssueDTO> issues = jdbcTemplate.query("SELECT id, name, message, author, projectId FROM Issues where id in (:issuesIds)",
 
                 Map.of("issuesIds", issuesIds),
 

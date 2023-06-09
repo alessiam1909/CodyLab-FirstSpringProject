@@ -3,6 +3,7 @@ package it.intesys.academy.service;
 import it.intesys.academy.dto.CommentDTO;
 import it.intesys.academy.dto.IssueDTO;
 import it.intesys.academy.dto.ProjectDTO;
+import it.intesys.academy.repository.CommentRepository;
 import it.intesys.academy.repository.IssueRepository;
 import it.intesys.academy.repository.ProjectRepository;
 import org.slf4j.Logger;
@@ -21,6 +22,8 @@ import java.util.Map;
 @Configuration
 public class ProjectService {
 
+    private final CommentRepository commentRepository;
+
     private final ProjectRepository projectRepository;
 
     private final IssueRepository issueRepository;
@@ -34,16 +37,20 @@ public class ProjectService {
 
 
 
-    public ProjectService(NamedParameterJdbcTemplate jdbcTemplate, SettingsService settingsService, ProjectRepository projectRepository, IssueRepository issueRepository) {
+    public ProjectService(NamedParameterJdbcTemplate jdbcTemplate, SettingsService settingsService, ProjectRepository projectRepository, IssueRepository issueRepository, CommentRepository commentRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.settingsService = settingsService;
+        this.commentRepository = commentRepository;
         this.issueRepository = issueRepository;
         this.projectRepository = projectRepository;
     }
 
-    public List<ProjectDTO> readProjects(String username) {
+    public List<ProjectDTO> getProjects(String username) {
 
         List<ProjectDTO> projects = projectRepository.getProjects(settingsService.getUserProjects(username));
+        for(ProjectDTO project:projects){
+            log.info(project.getName());
+        }
 
         List<Integer> projectIds = projects.stream()
                 .map(ProjectDTO::getId)
@@ -112,6 +119,30 @@ public class ProjectService {
             }
         }
 
+        return null;
+    }
+
+    public List<CommentDTO> getComments(Integer id, String username){
+        List<ProjectDTO> projects = projectRepository.getProjects(settingsService.getUserProjects(username));
+        List<Integer> projectIds = projects.stream()
+                .map(ProjectDTO::getId)
+                .toList();
+
+        if(projectIds.contains(id)) {
+            return commentRepository.getComments(id);
+        }
+        return null;
+    }
+
+    public CommentDTO getComment(Integer id, String username){
+        List<ProjectDTO> projects = projectRepository.getProjects(settingsService.getUserProjects(username));
+        List<Integer> projectIds = projects.stream()
+                .map(ProjectDTO::getId)
+                .toList();
+
+        if(projectIds.contains(id)) {
+            return commentRepository.getComments(id).get(0);
+        }
         return null;
     }
 

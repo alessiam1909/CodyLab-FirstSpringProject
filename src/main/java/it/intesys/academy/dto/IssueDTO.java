@@ -15,6 +15,17 @@ public class IssueDTO {
         this.projectId = projectId;
     }
 
+    public IssueDTO() {
+    }
+
+    public IssueDTO(int id, int projectId, String name, String message, String author) {
+        this.id = id;
+        this.projectId = projectId;
+        this.name = name;
+        this.message = message;
+        this.author = author;
+    }
+
     private int projectId;
 
     private String name;

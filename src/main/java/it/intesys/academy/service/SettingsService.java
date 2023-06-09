@@ -1,24 +1,36 @@
 package it.intesys.academy.service;
 
+import it.intesys.academy.dto.UserProjectDTO;
+import it.intesys.academy.repository.UserProjectRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class SettingsService {
 
-    private final DataSource dataSource;
+    private static final Logger log = LoggerFactory.getLogger(SettingsService.class);
 
-    public SettingsService(DataSource dataSource) {
-        this.dataSource = dataSource;
+    private final UserProjectRepository userProjectRepository;
+
+    public SettingsService(UserProjectRepository userProjectRepository) {
+        this.userProjectRepository = userProjectRepository;
     }
 
     public List<Integer> getUserProjects(String username) {
-        return List.of(1, 2, 3);
-    }
-
-    public List<Integer> getUserProjectsById(Integer projectId){
-        return List.of(1,2,3);
+        List<UserProjectDTO> users = userProjectRepository.getUser(username);
+        List<Integer> projects = new ArrayList<>();
+        if(users!=null){
+            for(UserProjectDTO project: users){
+                projects.add(project.getProjectId());
+            }
+        }else{
+            throw new RuntimeException("Ooops this username was not found!");
+        }
+        log.info("ok");
+        return projects;
     }
 }
