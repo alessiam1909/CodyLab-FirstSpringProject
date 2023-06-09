@@ -7,12 +7,22 @@ import java.util.List;
 @Service
 public class SettingsService {
     private final DataSource dataSource;
+
     public SettingsService(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
     public List<Integer> getUserProjects(String username) {
         return List.of(1, 2, 3);
+    }
+
+    /**
+     * tried to use a standard list to scroll issues
+     * @param username
+     * @return
+     */
+    public List<Integer> getUserIssues(String username) {
+        return List.of(1, 2, 3, 4, 5, 6);
     }
 }
 
