@@ -56,4 +56,12 @@ public class CommentRepository {
                 BeanPropertyRowMapper.newInstance(CommentDTO.class));
         return comments;
     }
+    public CommentDTO getComment(Integer commentId){
+        CommentDTO comment = jdbcTemplate.queryForObject("SELECT id, comment, author, issueId FROM Comments WHERE id = :commentId",
+
+                Map.of("commentId", commentId),
+
+                BeanPropertyRowMapper.newInstance(CommentDTO.class));
+        return comment;
+    }
 }

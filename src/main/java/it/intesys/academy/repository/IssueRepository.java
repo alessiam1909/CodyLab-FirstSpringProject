@@ -2,6 +2,7 @@ package it.intesys.academy.repository;
 
 import it.intesys.academy.dto.CommentDTO;
 import it.intesys.academy.dto.IssueDTO;
+import it.intesys.academy.dto.ProjectDTO;
 import it.intesys.academy.service.ProjectService;
 import it.intesys.academy.service.SettingsService;
 import org.slf4j.Logger;
@@ -60,5 +61,13 @@ public class IssueRepository {
 
         return issues;
 
+    }
+    public IssueDTO getIssue(Integer issueId){
+        IssueDTO issue = jdbcTemplate.queryForObject("SELECT id, name, message, author, projectId FROM Issues where id = :issueId",
+
+                Map.of("issueId", issueId),
+
+                BeanPropertyRowMapper.newInstance(IssueDTO.class));
+        return issue;
     }
 }
