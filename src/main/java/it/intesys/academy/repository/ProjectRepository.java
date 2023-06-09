@@ -20,32 +20,27 @@ public class ProjectRepository {
     public ProjectRepository(NamedParameterJdbcTemplate jdbcTemplate, SettingsService settingsService) {
         this.jdbcTemplate = jdbcTemplate;
         this.settingsService = settingsService;
+    };
+
+
+
+    public List<ProjectDTO> getProjects(List<Integer> projectIds){
+        List<ProjectDTO> projects = jdbcTemplate.query("SELECT id, name, description FROM Projects where id in (:projectIds)",
+
+                Map.of("projectIds", projectIds),
+
+                BeanPropertyRowMapper.newInstance(ProjectDTO.class));
+        return projects;
     }
 
-    public List<ProjectDTO> GetProjects(String username){
+    public List<ProjectDTO> getProject(Integer projectIds){
+        return jdbcTemplate.query("SELECT id, name, description FROM Projects where id in (:projectIds)",
 
-        List<Integer> userProjects = settingsService.getUserProjects(username);
-
-        List<ProjectDTO> projects = jdbcTemplate.query("SELECT id, name, description FROM Projects where id in (:projectIds)",
-                Map.of("projectIds", userProjects),
+                Map.of("projectIds", projectIds),
 
                 BeanPropertyRowMapper.newInstance(ProjectDTO.class));
+    }
 
-
-        return projects;
-    };
-
-
-    public ProjectDTO getProjectById(Integer projectId){
-
-
-        ProjectDTO project = jdbcTemplate.queryForObject("SELECT id, name, description FROM Projects where id = :projectId",
-                Map.of("projectId", projectId),
-
-                BeanPropertyRowMapper.newInstance(ProjectDTO.class));
-
-        return project;
-    };
 
 
 
