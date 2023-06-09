@@ -18,15 +18,15 @@ import java.util.Map;
 public class CommentRepository {
     private static final Logger log = LoggerFactory.getLogger(ProjectService.class);
 
-    private static NamedParameterJdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    private static SettingsService settingsService;
+    private final SettingsService settingsService;
 
     public CommentRepository(NamedParameterJdbcTemplate jdbcTemplate, SettingsService settingsService) {
         this.jdbcTemplate = jdbcTemplate;
         this.settingsService = settingsService;
     }
-    public static Map<Integer, List<CommentDTO>> getAllComments(List<Integer> issueIds){
+    public  Map<Integer, List<CommentDTO>> getAllComments(List<Integer> issueIds){
         Map<Integer, List<CommentDTO>> messageByIssuetId = new HashMap<>();
         jdbcTemplate.query("SELECT id, comment, author, issueId FROM Comments WHERE issueId in (:issueIds)",
                 Map.of("issueIds", issueIds),
@@ -48,7 +48,7 @@ public class CommentRepository {
         );
         return messageByIssuetId;
     }
-    public static List<CommentDTO> getCommentsOfAIssue(Integer issueId){
+    public  List<CommentDTO> getCommentsOfAIssue(Integer issueId){
         List<CommentDTO> comments = jdbcTemplate.query("SELECT id, comment, author, issueId FROM Comments WHERE issueId = :issueId",
 
                 Map.of("issueId", issueId),
