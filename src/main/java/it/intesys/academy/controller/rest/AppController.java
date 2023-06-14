@@ -29,10 +29,10 @@ public class AppController {
         return propertyMessageService.getMessage();
     }
 
-    @GetMapping("/list-projects")
-    public List<ProjectDTO> getProjects(@RequestParam String userName) {
-        return projectService.readProjects(userName);
-    }
+//    @GetMapping("/list-projects")
+//    public List<ProjectDTO> getProjects(@RequestParam String userName) {
+//        return projectService.readProjects(userName);
+//    }
     @GetMapping("/project")
     public ProjectDTO getProject(@PathVariable Integer projectId, String userName){
         return projectService.readProject(userName, projectId);
