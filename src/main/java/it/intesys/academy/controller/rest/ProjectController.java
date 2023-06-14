@@ -1,4 +1,4 @@
-package it.intesys.academy.controller;
+package it.intesys.academy.controller.rest;
 
 import it.intesys.academy.dto.ProjectDTO;
 import it.intesys.academy.repository.ProjectRepository;
