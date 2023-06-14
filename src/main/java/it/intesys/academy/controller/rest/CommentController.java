@@ -1,4 +1,4 @@
-package it.intesys.academy.controller;
+package it.intesys.academy.controller.rest;
 
 import it.intesys.academy.dto.CommentDTO;
 import it.intesys.academy.service.ProjectService;
