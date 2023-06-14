@@ -17,17 +17,19 @@ import java.util.List;
 import java.util.Map;
 @Repository
 public class IssueRepository {
-    private static final Logger log = LoggerFactory.getLogger(ProjectService.class);
+    private  final Logger log = LoggerFactory.getLogger(ProjectService.class);
 
-    private static NamedParameterJdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    private static SettingsService settingsService;
+    private final SettingsService settingsService;
+    private final CommentRepository commentRepository;
 
-    public IssueRepository(NamedParameterJdbcTemplate jdbcTemplate, SettingsService settingsService) {
+    public IssueRepository(NamedParameterJdbcTemplate jdbcTemplate, SettingsService settingsService, CommentRepository commentRepository) {
         this.jdbcTemplate = jdbcTemplate;
         this.settingsService = settingsService;
+        this.commentRepository = commentRepository;
     }
-    public static Map<Integer, List<IssueDTO>> getAllIssues(List<Integer> projectIds ){
+    public  Map<Integer, List<IssueDTO>> getAllIssues(List<Integer> projectIds ){
         Map<Integer, List<IssueDTO>> issuesByProjectId = new HashMap<>();
 
         jdbcTemplate.query("SELECT id, name, message, author, projectId FROM Issues WHERE projectId in (:projectIds)",
@@ -52,27 +54,20 @@ public class IssueRepository {
 
         return issuesByProjectId;
     }
-    public static List<IssueDTO> getIssuesOfAProject(Integer projectId){
-        List<IssueDTO> issues = jdbcTemplate.query("SELECT id, name, message, author, projectId FROM Issues WHERE projectId = :projectIds",
-
+    public  List<IssueDTO> getIssuesOfAProject(Integer projectId){
+        List<IssueDTO> issues = jdbcTemplate.query("SELECT id, name, message, author, projectId FROM Issues WHERE projectId = :projectId",
                 Map.of("projectId", projectId),
-
                 BeanPropertyRowMapper.newInstance(IssueDTO.class));
-
-        List<Integer> issueIds = new ArrayList<>();
-        for(IssueDTO issue : issues){
-            issueIds.add(issue.getId());
-        }
-        Map<Integer, List<CommentDTO>> messageByIssuetId = CommentRepository.getAllComments(issueIds);
-
-        for (IssueDTO issue : issues){
-            List<CommentDTO> messageDTOS = messageByIssuetId.get(issue.getId());
-            for (CommentDTO message : messageDTOS) {
-                issue.setComment(message);
-            }
-        }
 
         return issues;
 
+    }
+    public IssueDTO getIssue(Integer issueId){
+        IssueDTO issue = jdbcTemplate.queryForObject("SELECT id, name, message, author, projectId FROM Issues where id = :issueId",
+
+                Map.of("issueId", issueId),
+
+                BeanPropertyRowMapper.newInstance(IssueDTO.class));
+        return issue;
     }
 }

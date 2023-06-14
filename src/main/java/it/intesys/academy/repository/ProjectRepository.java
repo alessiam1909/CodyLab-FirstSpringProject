@@ -15,18 +15,17 @@ import java.util.List;
 import java.util.Map;
 @Repository
 public class ProjectRepository {
-    private static final Logger log = LoggerFactory.getLogger(ProjectService.class);
-    private static NamedParameterJdbcTemplate jdbcTemplate;
+    private  final Logger log = LoggerFactory.getLogger(ProjectService.class);
+    private final  NamedParameterJdbcTemplate jdbcTemplate;
 
-    private static SettingsService settingsService;
+    private final SettingsService settingsService;
 
     public ProjectRepository(SettingsService settingsService, NamedParameterJdbcTemplate jdbcTemplate) {
         this.settingsService = settingsService;
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public static List<ProjectDTO> getProjects(String userName){
-        List<Integer> projectIds = settingsService.getUserProjects(userName);
+    public  List<ProjectDTO> getProjects(List<Integer> projectIds){
 
 
         List<ProjectDTO> projects = jdbcTemplate.query("SELECT id, name, description FROM Projects where id in (:projectIds)",
@@ -38,13 +37,15 @@ public class ProjectRepository {
 
         return projects;
     }
-    public static ProjectDTO getProject(Integer projectId){
+    public  ProjectDTO getProject(Integer projectId){
 
         ProjectDTO project = jdbcTemplate.queryForObject("SELECT id, name, description FROM Projects where id = :projectId",
 
                 Map.of("projectId", projectId),
 
                 BeanPropertyRowMapper.newInstance(ProjectDTO.class));
+        log.info("HA FATTO LA QUERY");
+
 
         return project;
     }

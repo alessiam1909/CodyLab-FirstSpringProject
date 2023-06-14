@@ -12,6 +12,20 @@ public class IssueDTO {
     private String message;
 
     private String author;
+    private int projectId;
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public void setComment(List<CommentDTO> comment) {
+        this.comment = comment;
+    }
+
     private List<CommentDTO> comment = new ArrayList<>();
 
     public List<CommentDTO> getComment() {
