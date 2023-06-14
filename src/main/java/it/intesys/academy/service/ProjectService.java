@@ -80,52 +80,7 @@ public class ProjectService {
         }
         return project;
     }
-    public List<IssueDTO> readIssues(String username, Integer projectId){
-        List<IssueDTO> issues = issueRepository.getIssuesOfAProject(projectId);
 
-        List<Integer> issueIds = new ArrayList<>();
-        for(IssueDTO issue : issues){
-            issueIds.add(issue.getId());
-        }
-        Map<Integer, List<CommentDTO>> messageByIssueId = commentRepository.getAllComments(issueIds);
-
-        for (IssueDTO issue : issues){
-            List<CommentDTO> messageDTOS = messageByIssueId.get(issue.getId());
-            for (CommentDTO message : messageDTOS) {
-                issue.setComment(message);
-            }
-        }
-        return issues;
-    }
-    public List<CommentDTO> readComments(String username, Integer issueId){
-
-        return commentRepository.getCommentsOfAIssue(issueId);
-    }
-    public CommentDTO readComment(String username, Integer commentId){
-        List<Integer> projectId = settingsService.getUserProjects(username);
-        CommentDTO commentDTO = commentRepository.getComment(commentId);
-        IssueDTO issueDTO = issueRepository.getIssue(commentDTO.getIssueId());
-
-        if(!projectId.contains(issueDTO.getProjectId())){
-            return (new CommentDTO());
-        }
-
-        return commentDTO;
-    }
-    public IssueDTO readIssue(String username, Integer issueId){
-        List<Integer> projectId = settingsService.getUserProjects(username);
-        IssueDTO issueDTO = issueRepository.getIssue(issueId);
-
-        if(!projectId.contains(issueDTO.getProjectId())){
-            return (new IssueDTO());
-        }
-
-        List<CommentDTO> messageDTOS = commentRepository.getCommentsOfAIssue(issueId);
-        for (CommentDTO message : messageDTOS) {
-            issueDTO.setComment(message);
-        }
-        return issueDTO;
-    }
 
 
 }

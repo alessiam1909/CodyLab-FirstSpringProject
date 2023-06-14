@@ -2,6 +2,7 @@ package it.intesys.academy.controller;
 
 import it.intesys.academy.dto.IssueDTO;
 import it.intesys.academy.dto.ProjectDTO;
+import it.intesys.academy.service.IssueService;
 import it.intesys.academy.service.ProjectService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,17 +16,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class IssuesController {
 
 
-    private final ProjectService projectService;
+    private final IssueService issueService;
 
-    public IssuesController(ProjectService projectService) {
+    public IssuesController(IssueService issueService) {
 
-        this.projectService = projectService;
+        this.issueService = issueService;
     }
-
+//http://localhost:8080/mvc/issue/2/?userName=Zeno
     @GetMapping("/issue/{issueId}/")
     public String issue(Model model, @PathVariable Integer issueId, @RequestParam String userName) {
         model.addAttribute("username", userName);
-        model.addAttribute("issue", projectService.readIssue(userName, issueId));
+        model.addAttribute("issue", issueService.readIssue(userName, issueId));
 
 
         return "issue";
