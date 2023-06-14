@@ -1,0 +1,25 @@
+{{>header}}
+
+<div class="row center-align">
+    <h3>Comments list of issue:  <strong class="teal-text">{{issueId}}</strong> of <strong>{{username}}</strong></h3>
+</div>
+
+{{#comments}}
+
+    <div class="row">
+        <div class="col s12 m6">
+            <div class="card  #80cbc4 teal lighten-3">
+                <div class="card-image">
+                    <img src="https://picsum.photos/200/300" height="350px">
+
+                </div>
+                <div class="card-content  white-text">
+                    <span class="card-title">{{id}}</span>
+                    <p>{{comment}}</p>
+                    <p>{{author}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{{/comments}}
+{{>footer}}
