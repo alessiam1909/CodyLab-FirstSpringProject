@@ -2,7 +2,7 @@ package it.intesys.academy.dto;
 
 public class CommentDTO {
     private int id;
-    private String comment;
+    private String description;
     private String author;
 
     private int issueId;
@@ -11,9 +11,9 @@ public class CommentDTO {
         return id;
     }
 
-    public CommentDTO(int id, String comment, String author, int issueId) {
+    public CommentDTO(int id, String description, String author, int issueId) {
         this.id = id;
-        this.comment = comment;
+        this.description = description;
         this.author = author;
         this.issueId = issueId;
     }
@@ -44,12 +44,12 @@ public class CommentDTO {
     }
 
 
-    public String getComment() {
-        return comment;
+    public String getDescription() {
+        return description;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 

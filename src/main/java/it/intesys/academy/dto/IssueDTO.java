@@ -18,11 +18,11 @@ public class IssueDTO {
     public IssueDTO() {
     }
 
-    public IssueDTO(int id, int projectId, String name, String message, String author) {
+    public IssueDTO(int id, int projectId, String name, String description, String author) {
         this.id = id;
         this.projectId = projectId;
         this.name = name;
-        this.message = message;
+        this.description= description;
         this.author = author;
     }
 
@@ -30,7 +30,7 @@ public class IssueDTO {
 
     private String name;
 
-    private String message;
+    private String description;
 
     private String author;
 
@@ -54,14 +54,14 @@ public class IssueDTO {
         this.name = name;
     }
 
-    public String getMessage() {
+    public String getDescription() {
 
-        return message;
+        return description;
     }
 
-    public void setMessage(String message) {
+    public void setDescription(String description) {
 
-        this.message = message;
+        this.description = description;
     }
 
     public String getAuthor() {

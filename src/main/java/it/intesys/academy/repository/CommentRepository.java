@@ -21,7 +21,7 @@ public class CommentRepository {
     }
 
     public List<CommentDTO> getComments(Integer id){
-        return jdbcTemplate.query("SELECT id, comment, author, issueId FROM Comments WHERE issueId = (:issue)",
+        return jdbcTemplate.query("SELECT id, description, author, issueId FROM Comments WHERE issueId = (:issue)",
                 Map.of("issue", id),
                 BeanPropertyRowMapper.newInstance(CommentDTO.class));
     }

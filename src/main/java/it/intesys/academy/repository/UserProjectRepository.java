@@ -26,4 +26,13 @@ public class UserProjectRepository {
 
                 BeanPropertyRowMapper.newInstance(UserProjectDTO.class));
     }
+
+    public void createUserProject(String username, Integer projectId) {
+
+        Map<String, Object> parameterSource = Map.of("username", username, "projectId", projectId);
+        jdbcTemplate.update("INSERT INTO User_Projects (username, projectId) VALUES (:username, :projectId)",
+                parameterSource
+        );
+
+    }
 }
