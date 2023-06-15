@@ -7,6 +7,27 @@ public class IssueDTO {
 
     private int id;
 
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public IssueDTO() {
+    }
+
+    public IssueDTO(int id, int projectId, String name, String message, String author) {
+        this.id = id;
+        this.projectId = projectId;
+        this.name = name;
+        this.message = message;
+        this.author = author;
+    }
+
+    private int projectId;
+
     private String name;
 
     private String message;

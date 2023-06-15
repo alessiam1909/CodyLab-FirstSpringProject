@@ -1,3 +1,0 @@
-2023-06-08 14:50:26 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PROJECTS" not found (this database is empty); SQL statement:
-SELECT id, name, description FROM Projects where id in (?, ?, ?) [42104-214]

@@ -22,19 +22,28 @@ public class IssueRepository {
         this.settingsService = settingsService;
     }
 
-    public List<IssueDTO> GetIssues(String username){
+    public List<IssueDTO> readIssues(){
+        List<IssueDTO> projects = jdbcTemplate.query("SELECT id, name, message, author, projectId FROM Issues",
+                BeanPropertyRowMapper.newInstance(IssueDTO.class));
+        return projects;
+    }
 
-        List<Integer> userProjects = settingsService.getUserProjects(username);
+    public List<IssueDTO> searchIssues(List<Integer> issuesIds){
+        List<IssueDTO> issues = jdbcTemplate.query("SELECT id, name, message, author, projectId FROM Issues where id in (:issuesIds)",
 
-        List<IssueDTO> issues = jdbcTemplate.query("SELECT id, name, message, author FROM Issues where id in (:issueIds)",
-                Map.of("issueIds", userProjects),
+                Map.of("issuesIds", issuesIds),
 
                 BeanPropertyRowMapper.newInstance(IssueDTO.class));
-
-
         return issues;
-    };
+    }
 
+
+    public List<IssueDTO> readIssuesForProject(Integer projectIds){
+        List<IssueDTO> issues = jdbcTemplate.query("SELECT id, name, message, author, projectId FROM Issues WHERE projectId = (:projectIds)",
+                Map.of("projectIds",projectIds),
+                BeanPropertyRowMapper.newInstance(IssueDTO.class));
+        return issues;
+    }
 
 
 }
