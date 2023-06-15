@@ -5,7 +5,7 @@ import java.util.List;
 
 public class IssueDTO {
 
-    private int id;
+    private Integer id;
 
     private String name;
 
@@ -13,6 +13,7 @@ public class IssueDTO {
 
     private String author;
     private int projectId;
+    private List<CommentDTO> comment = new ArrayList<>();
 
     public int getProjectId() {
         return projectId;
@@ -22,21 +23,12 @@ public class IssueDTO {
         this.projectId = projectId;
     }
 
-    public void setComment(List<CommentDTO> comment) {
-        this.comment = comment;
-    }
-
-    private List<CommentDTO> comment = new ArrayList<>();
-
-    public List<CommentDTO> getComment() {
-        return comment;
-    }
 
     public void setComment(CommentDTO comment) {
         this.comment.add(comment);
     }
 
-    public int getId() {
+    public Integer getId() {
 
         return id;
     }
@@ -74,5 +66,9 @@ public class IssueDTO {
     public void setAuthor(String author) {
 
         this.author = author;
+    }
+    @Override
+    public String toString(){
+        return "name = " + name + ", message = " + message + ", projectId = " + projectId + ", author = " + author;
     }
 }

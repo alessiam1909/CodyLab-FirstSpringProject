@@ -4,7 +4,8 @@ import it.intesys.academy.dto.CommentDTO;
 import it.intesys.academy.dto.IssueDTO;
 import it.intesys.academy.repository.CommentRepository;
 import it.intesys.academy.repository.IssueRepository;
-import it.intesys.academy.repository.ProjectRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,17 +14,19 @@ import java.util.Map;
 @Service
 public class IssueService {
 
-    private final ProjectRepository projectRepository;
+    private  final Logger log = LoggerFactory.getLogger(ProjectService.class);
 
     private final SettingsService settingsService;
     private final IssueRepository issueRepository;
     private final CommentRepository commentRepository;
 
-    public IssueService(ProjectRepository projectRepository, SettingsService settingsService, IssueRepository issueRepository, CommentRepository commentRepository) {
-        this.projectRepository = projectRepository;
+    private final UserProjectService userProjectService;
+
+    public IssueService(SettingsService settingsService, IssueRepository issueRepository, CommentRepository commentRepository, UserProjectService userProjectService) {
         this.settingsService = settingsService;
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
+        this.userProjectService = userProjectService;
     }
 
 
@@ -58,5 +61,20 @@ public class IssueService {
             issueDTO.setComment(message);
         }
         return issueDTO;
+    }
+    public IssueDTO createIssue(IssueDTO issueDTO) {
+        Integer newIssueId = issueRepository.createIssue(issueDTO);
+
+        return issueRepository.getIssue(newIssueId);
+    }
+    public IssueDTO updateIssue(IssueDTO issue, String userName) {
+        if (!userProjectService.canThisUserReadThisProject(userName, issue.getProjectId())) {
+            throw new RuntimeException("Security constraints violation");
+        }
+
+        issueRepository.updateIssue(issue);
+
+
+        return issueRepository.getIssue(issue.getId());
     }
 }

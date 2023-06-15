@@ -6,8 +6,7 @@ import it.intesys.academy.dto.ProjectDTO;
 import it.intesys.academy.repository.CommentRepository;
 import it.intesys.academy.repository.IssueRepository;
 import it.intesys.academy.repository.ProjectRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,18 +16,19 @@ import java.util.Map;
 @Service
 public class ProjectService {
 
-    private  final Logger log = LoggerFactory.getLogger(ProjectService.class);
     private final ProjectRepository projectRepository;
 
     private final SettingsService settingsService;
     private final IssueRepository issueRepository;
     private final CommentRepository commentRepository;
+    private final UserProjectService userProjectService;
 
-    public ProjectService(ProjectRepository projectRepository, SettingsService settingsService, IssueRepository issueRepository, CommentRepository commentRepository) {
+    public ProjectService(ProjectRepository projectRepository, SettingsService settingsService, IssueRepository issueRepository, CommentRepository commentRepository, UserProjectService userProjectService) {
         this.projectRepository = projectRepository;
         this.settingsService = settingsService;
         this.issueRepository = issueRepository;
         this.commentRepository = commentRepository;
+        this.userProjectService = userProjectService;
     }
 
     public List<ProjectDTO> readProjects(String username) {
@@ -79,6 +79,25 @@ public class ProjectService {
             project.addIssue(issue);
         }
         return project;
+    }
+
+    public ProjectDTO createProject(ProjectDTO projectDTO, String username) {
+
+        Integer newProjectId = projectRepository.createProject(projectDTO);
+
+        userProjectService.associateUserToProject(username, newProjectId);
+
+        return projectRepository.getProject(newProjectId);
+    }
+    public ProjectDTO updateProject(ProjectDTO projectDTO, String userName) {
+        if (!userProjectService.canThisUserReadThisProject(userName, projectDTO.getId())) {
+            throw new RuntimeException("Security constraints violation");
+        }
+
+        projectRepository.updateProject(projectDTO);
+
+
+        return projectRepository.getProject(projectDTO.getId());
     }
 
 

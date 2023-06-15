@@ -6,10 +6,13 @@ import it.intesys.academy.service.ProjectService;
 import it.intesys.academy.service.SettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import java.util.List;
 import java.util.Map;
@@ -48,5 +51,26 @@ public class ProjectRepository {
 
 
         return project;
+    }
+
+    public Integer createProject(ProjectDTO projectDTO) {
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("name", projectDTO.getName())
+                .addValue("description", projectDTO.getDescription()
+                );
+        int numberOfInsertedRows = jdbcTemplate.update("INSERT INTO Project (name, description) VALUES (:name, :description)",
+                parameterSource, keyHolder
+        );
+
+        return keyHolder.getKey().intValue();
+    }
+    public void updateProject(ProjectDTO projectDTO) {
+        jdbcTemplate.update("update Projects set name = :name, description = :description where id = :projectId",
+                Map.of("name", projectDTO.getName(),
+                        "description", projectDTO.getDescription(),
+                        "projectId", projectDTO.getId()
+                ));
     }
 }

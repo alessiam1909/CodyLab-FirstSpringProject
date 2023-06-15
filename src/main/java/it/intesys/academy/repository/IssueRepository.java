@@ -8,7 +8,10 @@ import it.intesys.academy.service.SettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -68,6 +71,32 @@ public class IssueRepository {
                 Map.of("issueId", issueId),
 
                 BeanPropertyRowMapper.newInstance(IssueDTO.class));
+
+        log.info(issue.toString());
+
         return issue;
+    }
+    public Integer createIssue(IssueDTO issueDTO) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("name", issueDTO.getName())
+                .addValue("message", issueDTO.getMessage())
+                .addValue("projectId", issueDTO.getProjectId())
+                .addValue("author", issueDTO.getAuthor()
+                );
+        int numberOfInsertedRows = jdbcTemplate.update("INSERT INTO Issues (name, message, projectId, author) VALUES (:name, :message, :projectId, :author)",
+                parameterSource, keyHolder
+        );
+
+
+        return keyHolder.getKey().intValue();
+    }
+    public void updateIssue(IssueDTO issueDTO) {
+        jdbcTemplate.update("update Issues set name = :name, message = :message , author = :author where id = :issueId",
+                Map.of("name", issueDTO.getName(),
+                        "message", issueDTO.getMessage(),
+                        "issueId", issueDTO.getId(),
+                        "author", issueDTO.getAuthor()
+                ));
     }
 }

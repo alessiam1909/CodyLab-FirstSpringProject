@@ -3,7 +3,7 @@ package it.intesys.academy.dto;
 import java.util.Date;
 
 public class MessageDTO {
-
+    private Integer id;
     private String text;
     private Date timestamp;
 

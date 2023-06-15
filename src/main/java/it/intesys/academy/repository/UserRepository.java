@@ -38,4 +38,14 @@ public class UserRepository {
         log.info(projectIds.toString());
         return projectIds;
     }
+    public Integer getUserId(String username){
+        UserDTO userDTO = new UserDTO();
+
+        jdbcTemplate.query("SELECT id FROM Users WHERE name = :username",
+                Map.of("username",  username),
+                (ResultSet)-> {
+                    userDTO.setId(ResultSet.getInt("id"));
+                });
+        return userDTO.getId();
+    }
 }
