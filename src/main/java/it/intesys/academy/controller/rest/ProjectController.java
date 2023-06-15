@@ -25,4 +25,11 @@ public class ProjectController {
     public ProjectDTO createProject(@RequestParam String username, @RequestBody ProjectDTO projectDTO){
         return projectService.createProject(username, projectDTO);
     }
+
+
+    @PutMapping("/projects/{projectId}")
+    public ProjectDTO updateProject(@PathVariable int projectId, @RequestBody ProjectDTO projectDTO, @RequestParam String username){
+        ProjectDTO updatedProject = projectService.updateProject(projectDTO, username);
+        return  updatedProject;
+    }
 }

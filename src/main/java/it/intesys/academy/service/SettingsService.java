@@ -34,4 +34,11 @@ public class SettingsService {
         return projects;
     }
 
+
+    public boolean canThisUserReadThisProject(String username, int projectId) {
+
+        return ! userProjectRepository.usernameProjectVisibility(username, projectId).isEmpty();
+
+    }
+
 }
