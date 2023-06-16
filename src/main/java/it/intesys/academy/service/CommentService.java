@@ -40,4 +40,16 @@ public class CommentService {
 
         return commentDTO;
     }
+    public CommentDTO createComment(CommentDTO commentDTO){
+        Integer commentId = commentRepository.createComment(commentDTO);
+        return commentRepository.getComment(commentId);
+    }
+
+    public CommentDTO updateComment(CommentDTO commentDTO){
+        commentRepository.updateComment(commentDTO);
+        return commentRepository.getComment(commentDTO.getId());
+    }
+    public void deleteComment(Integer commentId){
+        commentRepository.deleteComment(commentId);
+    }
 }

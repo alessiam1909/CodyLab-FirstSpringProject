@@ -74,7 +74,6 @@ public class IssueService {
 
         issueRepository.updateIssue(issue);
 
-
         return issueRepository.getIssue(issue.getId());
     }
     public void deleteIssue(Integer issueId, String userName){

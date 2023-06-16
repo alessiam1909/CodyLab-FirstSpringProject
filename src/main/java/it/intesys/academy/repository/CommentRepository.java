@@ -7,7 +7,10 @@ import it.intesys.academy.service.SettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -63,5 +66,33 @@ public class CommentRepository {
 
                 BeanPropertyRowMapper.newInstance(CommentDTO.class));
         return comment;
+    }
+    public Integer createComment(CommentDTO commentDTO){
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("comment", commentDTO.getComment())
+                .addValue("author", commentDTO.getAuthor())
+                .addValue("issueId", commentDTO.getIssueId()
+                );
+        int numberOfInsertedRows = jdbcTemplate.update("INSERT INTO Comments (comment, author, issueId) VALUES (:comment, :author, :issueId)",
+                parameterSource, keyHolder
+        );
+
+
+        return keyHolder.getKey().intValue();
+    }
+    public void updateComment(CommentDTO commentDTO){
+
+        int numberOfInsertedRows = jdbcTemplate.update("UPDATE Comments set comment = :comment, author = :author where issueId = :issueId",
+                Map.of("comment", commentDTO.getComment(),
+                        "author", commentDTO.getAuthor(),
+                        "issueId", commentDTO.getIssueId()
+                ));
+
+
+    }
+
+    public void deleteComment(Integer commentId){
+        jdbcTemplate.update("DELETE FROM comments WHERE id = :commentId;", Map.of("commentId", commentId));
     }
 }

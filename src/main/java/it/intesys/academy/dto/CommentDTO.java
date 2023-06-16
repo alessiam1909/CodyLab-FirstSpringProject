@@ -6,8 +6,21 @@ public class CommentDTO {
 
     private String comment;
     private Date timestamp;
-    private int issueId;
+    private Integer issueId;
     private String author;
+    private Integer id;
+
+    public void setIssueId(Integer issueId) {
+        this.issueId = issueId;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getAuthor() {
         return author;
