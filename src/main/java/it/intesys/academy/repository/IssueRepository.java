@@ -49,6 +49,19 @@ public class IssueRepository {
     }
 
 
+    public IssueDTO readIssue(Integer issueId) {
+
+        IssueDTO issues =
+                jdbcTemplate.queryForObject("SELECT id, name, description, author, projectId FROM Issues WHERE id in (:issue)",
+
+                        Map.of("issue", issueId),
+
+                        BeanPropertyRowMapper.newInstance(IssueDTO.class));
+
+        return issues;
+    }
+
+
     //--------------------------------------------------------------------------------------------
 
 
@@ -65,6 +78,16 @@ public class IssueRepository {
         );
 
         return keyHolder.getKey().intValue();
+    }
+
+
+    public void updateIssue(IssueDTO issueDTO) {
+        jdbcTemplate.update("update Issues set name = :name, description = :description, author = :author, projectId = :projectId where id = :projectId",
+                Map.of("name", issueDTO.getName(),
+                        "description", issueDTO.getDescription(),
+                        "author", issueDTO.getAuthor(),
+                        "projectId", issueDTO.getId()
+                ));
     }
 
 

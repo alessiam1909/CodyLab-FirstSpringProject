@@ -159,6 +159,17 @@ public class ProjectService {
         return issueRepository.readIssuesForProject(issueDTO.getProjectId()).get(0);
     }
 
+    public IssueDTO updateIssue(IssueDTO issueDTO, String userName) {
+        if (!settingsService.canThisUserReadThisProject(userName, issueDTO.getId())) {
+            throw new RuntimeException("Security constraints violation");
+        }
+
+        issueRepository.updateIssue(issueDTO);
+
+
+        return issueRepository.readIssue(issueDTO.getProjectId());
+    }
+
 
     //---------------------------------------------------------------------------------------------------
     public List<CommentDTO> getComments(Integer id, String username){
