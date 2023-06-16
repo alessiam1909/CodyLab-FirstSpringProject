@@ -170,6 +170,10 @@ public class ProjectService {
         return issueRepository.readIssue(issueDTO.getId());
     }
 
+    public void deleteIssue(Integer issueId, String username){
+        issueRepository.deleteIssue(issueId);
+    }
+
 
     //---------------------------------------------------------------------------------------------------
     public List<CommentDTO> getComments(Integer id, String username){
