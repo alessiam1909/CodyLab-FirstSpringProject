@@ -77,16 +77,15 @@ public class ProjectRepository {
     }
     public void deleteProject(Integer projectId) {
 
-        jdbcTemplate.update("delete from Projects where id = :projectId", Map.of("projectId", projectId));
-        List<Integer> issuesId = issueService.readIssues()
-        jdbcTemplate.update("delete from Issues where projectId = :projectId", Map.of("projectId", projectId));
+        jdbcTemplate.update("DELETE FROM comments WHERE comments.issueId IN (SELECT id FROM issues WHERE PROJECTID = :projectId);", Map.of("projectId", projectId));
 
+        jdbcTemplate.update("DELETE FROM Issues WHERE Issues.projectId = :projectId;", Map.of("projectId", projectId));
+
+        jdbcTemplate.update("DELETE FROM User_projects WHERE User_projects.PROJECTID = :projectId;", Map.of("projectId", projectId));
+
+        jdbcTemplate.update("DELETE FROM Projects WHERE Projects.id = :projectId;", Map.of("projectId", projectId));
 
     }
 }
-    ALTER TABLE COMMENTS
-        ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY NOT NULL;
 
-        Alter Table COMMENTS
-        DROP column id ;
 

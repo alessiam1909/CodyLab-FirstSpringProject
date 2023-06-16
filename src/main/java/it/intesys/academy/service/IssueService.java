@@ -77,4 +77,10 @@ public class IssueService {
 
         return issueRepository.getIssue(issue.getId());
     }
+    public void deleteIssue(Integer issueId, String userName){
+        if(!userProjectService.canThisUserReadThisProject(userName, issueRepository.getIssue(issueId).getProjectId())){
+            throw new RuntimeException("Security constraints violation");
+        }
+        issueRepository.deleteIssue(issueId);
+    }
 }

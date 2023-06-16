@@ -72,8 +72,6 @@ public class IssueRepository {
 
                 BeanPropertyRowMapper.newInstance(IssueDTO.class));
 
-        log.info(issue.toString());
-
         return issue;
     }
     public Integer createIssue(IssueDTO issueDTO) {
@@ -98,5 +96,11 @@ public class IssueRepository {
                         "issueId", issueDTO.getId(),
                         "author", issueDTO.getAuthor()
                 ));
+    }
+    public void deleteIssue(Integer issueId){
+
+        jdbcTemplate.update("DELETE FROM comments WHERE issueId = :issueId;", Map.of("issueId", issueId));
+
+        jdbcTemplate.update("DELETE FROM Issues WHERE id = :issueId;", Map.of("issueId", issueId));
     }
 }
