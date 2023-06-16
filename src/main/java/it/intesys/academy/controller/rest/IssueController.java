@@ -34,8 +34,8 @@ public class IssueController {
         return projectService.createIssue(username, issueDTO);
     }
 
-    @PutMapping("/issues/{projectId}")
-    public IssueDTO updateIssue(@PathVariable int projectId, @RequestBody IssueDTO issueDTO, @RequestParam String username){
+    @PutMapping("/issues")
+    public IssueDTO updateIssue( @RequestBody IssueDTO issueDTO, @RequestParam String username){
         IssueDTO updatedIssue = projectService.updateIssue(issueDTO, username);
         return  updatedIssue;
     }

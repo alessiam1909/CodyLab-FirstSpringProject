@@ -82,11 +82,13 @@ public class IssueRepository {
 
 
     public void updateIssue(IssueDTO issueDTO) {
-        jdbcTemplate.update("update Issues set name = :name, description = :description, author = :author, projectId = :projectId where id = :projectId",
+        jdbcTemplate.update("update Issues set name = :name, description = :description, author = :author, projectId = :projectId where id = :issueId",
                 Map.of("name", issueDTO.getName(),
                         "description", issueDTO.getDescription(),
                         "author", issueDTO.getAuthor(),
-                        "projectId", issueDTO.getId()
+                        "projectId", issueDTO.getProjectId(),
+                        "issueId", issueDTO.getId()
+
                 ));
     }
 

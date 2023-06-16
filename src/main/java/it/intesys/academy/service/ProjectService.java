@@ -160,14 +160,14 @@ public class ProjectService {
     }
 
     public IssueDTO updateIssue(IssueDTO issueDTO, String userName) {
-        if (!settingsService.canThisUserReadThisProject(userName, issueDTO.getId())) {
+        if (!settingsService.canThisUserReadThisProject(userName, issueDTO.getProjectId())) {
             throw new RuntimeException("Security constraints violation");
         }
 
         issueRepository.updateIssue(issueDTO);
 
 
-        return issueRepository.readIssue(issueDTO.getProjectId());
+        return issueRepository.readIssue(issueDTO.getId());
     }
 
 
