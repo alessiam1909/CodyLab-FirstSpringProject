@@ -7,6 +7,8 @@ import it.intesys.academy.service.ProjectService;
 import it.intesys.academy.service.SettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,17 +35,17 @@ public class CommentController {
         return commentService.readComment(userName, commentId);
     }
     @PostMapping("/comments")
-    public CommentDTO createComment(@RequestBody CommentDTO commentDTO, @RequestParam String userName){
+    public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentDTO, @RequestParam String userName){
 
         if(!settingsService.getUserProjects(userName).contains(issueService.readIssue(userName, commentDTO.getIssueId()).getProjectId())){
             throw new RuntimeException("You cannot add issue to this project");
         }
 
-        return commentService.createComment(commentDTO);
+        return ResponseEntity.ok(commentService.createComment(commentDTO));
     }
 
     @PutMapping("/comments/{commentId}")
-    public CommentDTO updateComment(@RequestBody CommentDTO commentDTO, @RequestParam String userName, @PathVariable Integer commentId){
+    public ResponseEntity<CommentDTO> updateComment(@RequestBody CommentDTO commentDTO, @RequestParam String userName, @PathVariable Integer commentId){
         if (commentDTO.getId() == null) {
             throw new RuntimeException("Bad request, id must not be null when updating a comment");
         }
@@ -55,15 +57,16 @@ public class CommentController {
         }
         commentDTO.setId(commentId);
 
-        return commentService.updateComment(commentDTO);
+        return ResponseEntity.ok(commentService.updateComment(commentDTO))  ;
     }
 
     @DeleteMapping("/comments/{commentId}")
-    public void deleteComment(@PathVariable Integer commentId, @RequestParam String username) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Integer commentId, @RequestParam String username) {
         if(!settingsService.getUserProjects(username).contains(issueService.readIssue(username, commentId).getProjectId())){
             throw new RuntimeException("You cannot add comments to this project");
         }
         commentService.deleteComment(commentId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 

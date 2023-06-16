@@ -7,6 +7,8 @@ import it.intesys.academy.service.IssueService;
 import it.intesys.academy.service.SettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,28 +30,30 @@ public class IssueController {
         return issueService.readIssue(userName, issueId);
     }
     @PostMapping("/issues")
-    public IssueDTO createIssue(@RequestBody IssueDTO issueDTO,
+    public ResponseEntity<IssueDTO> createIssue(@RequestBody IssueDTO issueDTO,
                                     @RequestParam String username) {
         if(!settingsService.getUserProjects(username).contains(issueDTO.getProjectId())){
             throw new RuntimeException("You cannot add issue to this project");
         }
 
 
-        return issueService.createIssue(issueDTO);
+        return ResponseEntity.ok(issueService.createIssue(issueDTO));
     }
     @PutMapping("/issues/{issueId}")
-    public IssueDTO updateIssue(@PathVariable int issueId, @RequestBody IssueDTO issueDTO, @RequestParam String username) {
+    public ResponseEntity<IssueDTO> updateIssue(@PathVariable int issueId, @RequestBody IssueDTO issueDTO, @RequestParam String username) {
         if (issueDTO.getId() == null) {
             throw new RuntimeException("Bad request, id must not be null when updating a project");
         }
         if (issueDTO.getId() != issueId) {
             throw new RuntimeException("Bad request, id in path and in body must be the same");
         }
-        return issueService.updateIssue(issueDTO, username);
+        return ResponseEntity.ok(issueService.updateIssue(issueDTO, username));
     }
     @DeleteMapping("/issues/{issueId}")
-    public void deleteIssue(@PathVariable Integer issueId, @RequestParam String username) {
+    public ResponseEntity<Void> deleteIssue(@PathVariable Integer issueId, @RequestParam String username) {
         issueService.deleteIssue(issueId, username);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 
 }
