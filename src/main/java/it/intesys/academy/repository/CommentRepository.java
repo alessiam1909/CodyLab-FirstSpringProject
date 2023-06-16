@@ -25,4 +25,6 @@ public class CommentRepository {
                 Map.of("issue", id),
                 BeanPropertyRowMapper.newInstance(CommentDTO.class));
     }
+
+
 }

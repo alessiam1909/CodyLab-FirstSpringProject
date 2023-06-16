@@ -4,7 +4,10 @@ import it.intesys.academy.dto.IssueDTO;
 import it.intesys.academy.dto.ProjectDTO;
 import it.intesys.academy.service.SettingsService;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -43,6 +46,25 @@ public class IssueRepository {
                 Map.of("projectIds",projectIds),
                 BeanPropertyRowMapper.newInstance(IssueDTO.class));
         return issues;
+    }
+
+
+    //--------------------------------------------------------------------------------------------
+
+
+    public Integer createIssue(IssueDTO issueDTO) {
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+        parameterSource.addValue("name", issueDTO.getName());
+        parameterSource.addValue("description", issueDTO.getDescription());
+                parameterSource.addValue("projectId", issueDTO.getProjectId());
+                parameterSource.addValue("author", issueDTO.getAuthor());
+        jdbcTemplate.update("INSERT INTO Issues (name, description, author, projectId) VALUES (:name, :description, :author, :projectId)",
+                parameterSource, keyHolder
+        );
+
+        return keyHolder.getKey().intValue();
     }
 
 

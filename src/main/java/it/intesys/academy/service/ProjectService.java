@@ -111,6 +111,11 @@ public class ProjectService {
         return projectRepository.getProject(projectDTO.getId()).get(0);
     }
 
+    public void deleteProject(Integer projectId, String username){
+        userProjectRepository.deleteUser(projectId);
+        projectRepository.deleteProject(projectId);
+    }
+
     //---------------------------------------------------------------------------------------------------
 
     public List<IssueDTO> readIssues(Integer id, String username){
@@ -149,6 +154,13 @@ public class ProjectService {
         return null;
     }
 
+    public IssueDTO createIssue(String username, IssueDTO issueDTO){
+        int issueId = issueRepository.createIssue(issueDTO);
+        return issueRepository.readIssuesForProject(issueDTO.getProjectId()).get(0);
+    }
+
+
+    //---------------------------------------------------------------------------------------------------
     public List<CommentDTO> getComments(Integer id, String username){
         List<ProjectDTO> projects = projectRepository.getProjects(settingsService.getUserProjects(username));
         List<Integer> projectIds = projects.stream()

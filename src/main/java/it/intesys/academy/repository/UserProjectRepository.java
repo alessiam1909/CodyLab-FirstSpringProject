@@ -55,4 +55,9 @@ public class UserProjectRepository {
         }
 
     }
+
+    public void deleteUser(Integer projectId){
+        jdbcTemplate.update("delete from User_Projects where id = :projectId ", Map.of("projectId", projectId));
+    }
+
 }
